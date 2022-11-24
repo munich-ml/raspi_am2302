@@ -9,6 +9,6 @@ gpio.setmode(gpio.BCM)
 gpio.setup(PIN_AM2302, gpio.IN, pull_up_down=gpio.PUD_OFF)
 
 while True:
-    hum, temp = Ada.read_retry(Ada.AM2302, PIN_AM2302)    
+    hum, temp = Ada.read_retry(Ada.DHT22, PIN_AM2302)    
     print("T={0:4.1f}°C, RH={1:4.1f}%".format(temp, hum))
     time.sleep(1)
