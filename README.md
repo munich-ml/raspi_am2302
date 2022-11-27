@@ -10,13 +10,14 @@ crontab -e     # edit cron jobs
 crontab -r     # remove cron jobs
 ```
 
+Paste the following script into `crontab -e`
+```bash
+# ┌───────────── Minute (0 - 59)
+# │ ┌───────────── Stunde (0 - 23)
+# │ │ ┌───────────── Tag des Monats (1 - 31)
+# │ │ │ ┌───────────── Monat (1 - 12)
+# │ │ │ │ ┌───────────── Wochentag (0 - 6)
+# │ │ │ │ │
 
-```
-┌───────────── Minute (0 - 59)
-│ ┌───────────── Stunde (0 - 23)
-│ │ ┌───────────── Tag des Monats (1 - 31)
-│ │ │ ┌───────────── Monat (1 - 12)
-│ │ │ │ ┌───────────── Wochentag (0 - 6)
-│ │ │ │ │
-/15 * * * *  /Pfad/Programmname
+* * * * *  python /home/pi/Desktop/raspi_am2302/sensor.py
 ```
