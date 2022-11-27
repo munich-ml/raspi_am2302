@@ -25,8 +25,8 @@ if not os.path.isfile(fp):
     with open(fp, "w") as file:
         file.write(header)
         
-pi = pigpio.pi()
-
+# pi = pigpio.pi()
+# 
 # while True:
 #     line = dt.datetime.now().strftime("%Y%m%d_%H%M%S")
 #     for sen in SENSORS:
