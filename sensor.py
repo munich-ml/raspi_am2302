@@ -1,6 +1,11 @@
-import os, pathlib, pigpio, time
+import logging, os, pathlib, pigpio, time
 import datetime as dt
 import DHT22
+
+logging.basicConfig(level=logging.DEBUG,
+                    format='%(asctime)s | %(levelname)s | %(funcName)s | %(message)s',
+                    handlers=[logging.FileHandler("logging.txt"),
+                              logging.StreamHandler()])
 
 fn = dt.datetime.now().strftime("%Y-%m-%d.csv")
 fp = os.path.join(pathlib.Path(__file__).parent, "logfiles", fn)
@@ -12,32 +17,36 @@ if not os.path.isfile(fp):
     
     # create a logfile headerline 
     header = "datetime,"
-    for label in ("temp", "humi"):
-        for sen in SENSORS:
+    for sen in SENSORS:
+        for label in ("temp", "humi"):
             header += "{}{},".format(label, sen)
     header = header[:-1] + "\n"
     
     with open(fp, "w") as file:
         file.write(header)
         
-# acquire sensor data
-pi = pigpio.pi()
-s = DHT22.sensor(pi, 23)
-
-s.trigger()
-
-time.sleep(0.2)
-
-#print("{} {} {} {:3.2f} {} {} {} {}".format(
-#    r, s.humidity(), s.temperature(), s.staleness(),
-#    s.bad_checksum(), s.short_message(), s.missing_message(),
-#    s.sensor_resets()))
-
-s.cancel()
-pi.stop()
-        
-# write new sensor data to the logfile
+# prepare new line in logfile
 line = dt.datetime.now().strftime("%Y%m%d_%H%M%S")
-line += ",{:.1f},xxx,{:.1f},xxx\n".format(s.temperature(), s.humidity())
-with open(fp, "a") as file:
-    file.write(line)
+
+# acquire sensor data
+try: 
+    pi = pigpio.pi()
+    for sen in SENSORS:
+        s = DHT22.sensor(pi, sen)
+        s.trigger()
+        time.sleep(0.2)
+
+        #print("{} {} {} {:3.2f} {} {} {} {}".format(
+        #    r, s.humidity(), s.temperature(), s.staleness(),
+        #    s.bad_checksum(), s.short_message(), s.missing_message(),
+        #    s.sensor_resets()))
+        line += ",{:.1f}".format(s.temperature())
+        line += ",{:.1f}".format(s.humidity())
+        s.cancel()
+except Exception as e:
+    logging.error(str(e))        
+else:
+    with open(fp, "a") as file:
+        file.write(line+"\n")
+finally:
+    pi.stop()
