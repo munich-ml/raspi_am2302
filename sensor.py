@@ -42,7 +42,6 @@ while True:
         #line += "\t{:.1f}".format(s.temperature())
         #line += ",{:.1f}".format(s.humidity())
         s.cancel()
-    logging.debug(line)
     time.sleep(4)
 
 # # prepare new line in logfile
