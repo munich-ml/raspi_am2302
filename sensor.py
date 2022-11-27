@@ -1,5 +1,6 @@
-import os, pathlib
+import os, pathlib, pigpio, time
 import datetime as dt
+import DHT22
 
 fn = dt.datetime.now().strftime("%Y-%m-%d.csv")
 fp = os.path.join(pathlib.Path(__file__).parent, "logfiles", fn)
@@ -19,8 +20,24 @@ if not os.path.isfile(fp):
     with open(fp, "w") as file:
         file.write(header)
         
+# acquire sensor data
+pi = pigpio.pi()
+s = DHT22.sensor(pi, 23)
+
+s.trigger()
+
+time.sleep(0.2)
+
+#print("{} {} {} {:3.2f} {} {} {} {}".format(
+#    r, s.humidity(), s.temperature(), s.staleness(),
+#    s.bad_checksum(), s.short_message(), s.missing_message(),
+#    s.sensor_resets()))
+
+s.cancel()
+pi.stop()
+        
 # write new sensor data to the logfile
 line = dt.datetime.now().strftime("%Y%m%d_%H%M%S")
-line += ",11.0,12.3,67.8,68.0\n"
+line += ",{:.1f},xxx,{:.1f},xxx\n".format(s.temperature(), s.humidity())
 with open(fp, "a") as file:
     file.write(line)
