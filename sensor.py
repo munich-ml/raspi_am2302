@@ -25,47 +25,27 @@ if not os.path.isfile(fp):
     with open(fp, "w") as file:
         file.write(header)
         
-# pi = pigpio.pi()
-# 
-# while True:
-#     line = dt.datetime.now().strftime("%Y%m%d_%H%M%S")
-#     for sen in SENSORS:
-#         s = DHT22.sensor(pi, sen)
-#         s.trigger()
-#         time.sleep(0.2)
-# 
-#         logging.debug("{}: {:.1f} {:.1f} {:3.2f} {} {} {} {}".format(
-#             sen, s.temperature(), s.humidity(), s.staleness(),
-#             s.bad_checksum(), s.short_message(), s.missing_message(),
-#             s.sensor_resets()))
-#         #line += "\t{:.1f}".format(s.temperature())
-#         #line += ",{:.1f}".format(s.humidity())
-#         s.cancel()
-#     logging.debug("########################################")
-#     time.sleep(4)
 
 # prepare new line in logfile
 line = dt.datetime.now().strftime("%Y%m%d_%H%M%S")
 
-# acquire sensor data
 try: 
     pi = pigpio.pi()
     for sen in SENSORS:
         s = DHT22.sensor(pi, sen)
-        s.trigger()
+        s.trigger()   # acquire sensor data
         time.sleep(0.2)
-        #if s.bad_checksum() or s.short_message() or s.missing_message() or s.sensor_resets():
-        #    logging.warning("Sensor GPIO{} {} {} {} {} {} {} {}".format(sen, 
-        #        s.temperature(), s.humidity(), s.staleness(), s.bad_checksum(), 
-        #        s.short_message(), s.missing_message(), s.sensor_resets()))
+        if s.bad_checksum() or s.short_message() or s.missing_message() or s.sensor_resets():
+            logging.warning("Sensor GPIO{} {} {} {} {} {} {} {}".format(sen, 
+                s.temperature(), s.humidity(), s.staleness(), s.bad_checksum(), 
+                s.short_message(), s.missing_message(), s.sensor_resets()))
         line += ",{:.1f}".format(s.temperature())
         line += ",{:.1f}".format(s.humidity())
         s.cancel()
 except Exception as e:
     logging.error(str(e))        
 else:
-    logging.debug(line)
     with open(fp, "a") as file:
         file.write(line+"\n")
 # finally:
-#     pi.stop()
+#     pi.stop()   # pi.stop as proposed in DHT22.main causes exceptions
