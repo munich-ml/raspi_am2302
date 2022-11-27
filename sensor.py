@@ -70,3 +70,4 @@ else:
 finally:
     logging.debug("stopping " + str(pi))
     pi.stop()
+logging.debug("stopping " + str(pi))
