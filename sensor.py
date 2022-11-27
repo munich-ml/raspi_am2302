@@ -1,14 +1,26 @@
-import time
-import RPi.GPIO as gpio    
-import Adafruit_DHT as Ada
+import os, pathlib
+import datetime as dt
 
-PIN_AM2302 = 23
+fn = dt.datetime.now().strftime("%Y-%m-%d.csv")
+fp = os.path.join(pathlib.Path(__file__).parent, "logfiles", fn)
 
-gpio.setwarnings(False)
-gpio.setmode(gpio.BCM)
-gpio.setup(PIN_AM2302, gpio.IN, pull_up_down=gpio.PUD_OFF)
+SENSORS = [23, 24]    # GPIO pin numbers of DHT22 sensors 
 
-while True:
-    hum, temp = Ada.read_retry(Ada.DHT22, PIN_AM2302)    
-    print("T={0:4.1f}°C, RH={1:4.1f}%".format(temp, hum))
-    time.sleep(1)
+# create a new logfile if it doesn't exist yet
+if not os.path.isfile(fp):
+    
+    # create a logfile headerline 
+    header = "datetime,"
+    for label in ("temp", "humi"):
+        for sen in SENSORS:
+            header += "{}{},".format(label, sen)
+    header = header[-1] + "\n"
+    
+    with open(fp, "w") as file:
+        file.write(header)
+        
+# write new sensor data to the logfile
+line = dt.datetime.now().strftime("%Y%m%d_%H%M%S")
+line += ",11.0,12.3,67.8,68.0\n"
+with open(fp, "a") as file:
+    file.write(line)
