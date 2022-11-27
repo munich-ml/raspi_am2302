@@ -54,10 +54,10 @@ try:
         s = DHT22.sensor(pi, sen)
         s.trigger()
         time.sleep(0.2)
-        if s.bad_checksum() or s.short_message() or s.missing_message() or s.sensor_resets():
-            logging.warning("Sensor GPIO{} {} {} {} {} {} {} {}".format(sen, 
-                s.temperature(), s.humidity(), s.staleness(), s.bad_checksum(), 
-                s.short_message(), s.missing_message(), s.sensor_resets()))
+        #if s.bad_checksum() or s.short_message() or s.missing_message() or s.sensor_resets():
+        #    logging.warning("Sensor GPIO{} {} {} {} {} {} {} {}".format(sen, 
+        #        s.temperature(), s.humidity(), s.staleness(), s.bad_checksum(), 
+        #        s.short_message(), s.missing_message(), s.sensor_resets()))
         line += ",{:.1f}".format(s.temperature())
         line += ",{:.1f}".format(s.humidity())
         s.cancel()
