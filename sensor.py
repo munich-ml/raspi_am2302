@@ -34,14 +34,14 @@ while True:
         s.trigger()
         time.sleep(0.2)
 
-        logging.debug("### Sensor " + str(sen))
-        logging.debug("{} {} {:3.2f} {} {} {} {}".format(
-            s.humidity(), s.temperature(), s.staleness(),
+        logging.debug("{}: {:.1f} {:.1f} {:3.2f} {} {} {} {}".format(
+            sen, s.temperature(), s.humidity(), s.staleness(),
             s.bad_checksum(), s.short_message(), s.missing_message(),
             s.sensor_resets()))
         #line += "\t{:.1f}".format(s.temperature())
         #line += ",{:.1f}".format(s.humidity())
         s.cancel()
+    logging.debug("########################################")
     time.sleep(4)
 
 # # prepare new line in logfile
