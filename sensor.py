@@ -64,7 +64,9 @@ try:
 except Exception as e:
     logging.error(str(e))        
 else:
+    logging.debug(line)
     with open(fp, "a") as file:
         file.write(line+"\n")
 finally:
+    logging.debug("stopping " + str(pi))
     pi.stop()
