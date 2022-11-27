@@ -14,7 +14,7 @@ if not os.path.isfile(fp):
     for label in ("temp", "humi"):
         for sen in SENSORS:
             header += "{}{},".format(label, sen)
-    header = header[-1] + "\n"
+    header = header[:-1] + "\n"
     
     with open(fp, "w") as file:
         file.write(header)
