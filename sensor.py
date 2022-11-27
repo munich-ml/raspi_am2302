@@ -67,10 +67,5 @@ else:
     logging.debug(line)
     with open(fp, "a") as file:
         file.write(line+"\n")
-finally:
-    logging.debug("stopping " + str(pi))
-    try:
-        pi.stop()
-    except Exception as e:
-        logging.error(e)
-logging.debug("stopping " + str(pi))
+# finally:
+#     pi.stop()
