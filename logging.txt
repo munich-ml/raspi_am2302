@@ -1,0 +1,1 @@
+2022-11-27 21:11:48,233 | ERROR | <module> | 'NoneType' object has no attribute 'send'
